@@ -9,31 +9,35 @@
 1. Build the module:
    ```bash
    make
+   ```
 
 2. Insert the module into the kernel:
    ```bash
    sudo insmod dma_buffer.ko
+   ```
 
 ## How to use
 
 1. Open device:
-   ```bash
+   ```c
    int fd = open("/dev/dma_buffer", O_RDWR | O_SYNC);
    if (fd < 0) {
       perror("open error");
    }
+   ```
 
 2. Mapping on userspace:
-   ```bash
-   vodi *virt_addr = mmap(NULL, BUFFER_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+   ```c
+   void *virt_addr = mmap(NULL, BUFFER_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
    if (virt_addr == MAP_FAILED) {
       perror("mmap error");
    } else{
       printf("virt_addr = %p\n", virt_addr);
    }
+   ```
 
 3. Get physical address:
-   ```bash
+   ```c
    #define DMA_BUF_IOCTL_GET_PHYS_ADDR _IOR(0xF0, 1, uint32_t)
    
    uint32_t phys_addr;
@@ -43,4 +47,5 @@
    } else{
       printf("phys_addr = 0x%08x\n", phys_addr);
    }
+   ```
     
